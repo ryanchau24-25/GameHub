@@ -1,0 +1,9 @@
+/workspaces/GameHub/src/main/java/com/gamehub/SimulationManager.java
+/workspaces/GameHub/src/main/java/com/gamehub/Simulation.java
+/workspaces/GameHub/src/main/java/com/gamehub/controller/SimulationController.java
+/workspaces/GameHub/src/main/java/com/gamehub/GameHubApplication.java
+/workspaces/GameHub/src/main/java/com/gamehub/World.java
+/workspaces/GameHub/src/main/java/com/gamehub/Predator.java
+/workspaces/GameHub/src/main/java/com/gamehub/dto/SimulationStateDTO.java
+/workspaces/GameHub/src/main/java/com/gamehub/Agent.java
+/workspaces/GameHub/src/main/java/com/gamehub/Herbivore.java

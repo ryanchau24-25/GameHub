@@ -1,0 +1,9 @@
+com/gamehub/Agent.class
+com/gamehub/GameHubApplication.class
+com/gamehub/Simulation.class
+com/gamehub/Herbivore.class
+com/gamehub/SimulationManager.class
+com/gamehub/Predator.class
+com/gamehub/World.class
+com/gamehub/dto/SimulationStateDTO.class
+com/gamehub/controller/SimulationController.class
