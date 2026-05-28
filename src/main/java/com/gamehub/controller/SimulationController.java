@@ -25,11 +25,22 @@ public class SimulationController {
             simulationManager.getMaxTurns(),
             simulationManager.getHerbivoreCount(),
             simulationManager.getPredatorCount(),
+            simulationManager.isPlayerAlive(),
+            simulationManager.getPlayerEnergy(),
             simulationManager.isPaused(),
             simulationManager.isFinished(),
             simulationManager.getRows(),
             simulationManager.getCols()
         );
+    }
+
+    /**
+     * POST /api/simulation/move - Move the player using a direction.
+     */
+    @PostMapping("/move")
+    public SimulationStateDTO move(@RequestParam String direction) {
+        simulationManager.movePlayer(direction);
+        return getState();
     }
     
     /**

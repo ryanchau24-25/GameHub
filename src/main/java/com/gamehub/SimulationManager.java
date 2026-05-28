@@ -11,11 +11,12 @@ public class SimulationManager {
     private int turn;
     private int maxTurns;
     private boolean isPaused;
+    private PlayerAgent player;
     
     private static final int WORLD_ROWS = 20;
     private static final int WORLD_COLS = 40;
     private static final int MAX_TURNS = 100;
-    private static final int NUM_HERBIVORES = 8;
+    private static final int NUM_HERBIVORES = 7;
     private static final int NUM_PREDATORS = 2;
     private static final int FOOD_RESPAWN_RATE = 3;
     
@@ -34,6 +35,16 @@ public class SimulationManager {
      * Initialize the world with agents
      */
     private void initializeAgents() {
+        // Add a player agent at a random starting position
+        player = new PlayerAgent(world);
+        int playerRow;
+        int playerCol;
+        do {
+            playerRow = 2 + (int)(Math.random() * (WORLD_ROWS - 4));
+            playerCol = 2 + (int)(Math.random() * (WORLD_COLS - 4));
+        } while (!world.isValidPosition(playerRow, playerCol) || world.hasFoodAt(playerRow, playerCol) || world.getAgentAt(playerRow, playerCol) != null);
+        world.addAgent(player, playerRow, playerCol);
+
         // Add herbivores at random positions
         for (int i = 0; i < NUM_HERBIVORES; i++) {
             Herbivore herb = new Herbivore(world);
@@ -59,6 +70,51 @@ public class SimulationManager {
         this.turn = 0;
         this.isPaused = true;
         initializeAgents();
+    }
+
+    /**
+     * Move the player agent in the requested direction.
+     */
+    public boolean movePlayer(String direction) {
+        if (player == null || isFinished()) {
+            return false;
+        }
+
+        int dr = 0;
+        int dc = 0;
+        String dir = direction.toLowerCase();
+        if ("up".equals(dir)) {
+            dr = -1;
+        } else if ("down".equals(dir)) {
+            dr = 1;
+        } else if ("left".equals(dir)) {
+            dc = -1;
+        } else if ("right".equals(dir)) {
+            dc = 1;
+        } else {
+            return false;
+        }
+
+        int newRow = player.getRow() + dr;
+        int newCol = player.getCol() + dc;
+
+        if (!world.isValidPosition(newRow, newCol)) {
+            return false;
+        }
+
+        Agent agentAtTarget = world.getAgentAt(newRow, newCol);
+        if (agentAtTarget != null) {
+            return false;
+        }
+
+        if (world.hasFoodAt(newRow, newCol)) {
+            world.removeFoodAt(newRow, newCol);
+            player.increaseEnergy(10);
+        }
+
+        player.setPosition(newRow, newCol);
+        player.decreaseEnergy(1);
+        return true;
     }
     
     /**
@@ -173,7 +229,7 @@ public class SimulationManager {
     public int getHerbivoreCount() {
         int count = 0;
         for (Agent agent : world.getAgents()) {
-            if (agent instanceof Herbivore) count++;
+            if (agent instanceof Herbivore && !(agent instanceof PlayerAgent)) count++;
         }
         return count;
     }
@@ -184,6 +240,14 @@ public class SimulationManager {
             if (agent instanceof Predator) count++;
         }
         return count;
+    }
+
+    public int getPlayerEnergy() {
+        return player != null ? player.getEnergy() : 0;
+    }
+
+    public boolean isPlayerAlive() {
+        return player != null && player.isAlive() && world.getAgents().contains(player);
     }
     
     /**

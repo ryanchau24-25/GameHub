@@ -52,7 +52,7 @@ public class Predator extends Agent {
             int newCol = col + dir[1];
             
             Agent prey = world.getAgentAt(newRow, newCol);
-            if (prey instanceof Herbivore) {
+            if (prey instanceof Herbivore || prey instanceof PlayerAgent) {
                 world.removeAgent(prey);
                 increaseEnergy(PREY_VALUE);
                 return true;
@@ -69,7 +69,7 @@ public class Predator extends Agent {
         int closestDist = HUNT_RANGE + 1;
         
         for (Agent agent : world.getAgents()) {
-            if (agent instanceof Herbivore) {
+            if (agent instanceof Herbivore || agent instanceof PlayerAgent) {
                 int dist = distanceTo(agent);
                 if (dist < closestDist && dist > 0) {
                     closestDist = dist;
